@@ -16,7 +16,7 @@ import Login from './components/account/Login';
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
   const token = sessionStorage.getItem('accessToken');
-  return isAuthenticated && token ? 
+  return isAuthenticated && token ?
     <>
       <Header />
       <Outlet />
@@ -30,10 +30,10 @@ function App() {
   return (
     <DataProvider>
       <BrowserRouter>
-        <Box style={{ marginTop: 64 }}>
+        <Box style={{ marginTop: 68 }}>
           <Routes>
             <Route path='/account' element={<Login isUserAuthenticated={isUserAuthenticated} />} />
-            
+
             <Route path='/' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
               <Route path='/' element={<Home />} />
             </Route>

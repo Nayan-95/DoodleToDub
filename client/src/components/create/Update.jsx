@@ -1,43 +1,109 @@
 import React, { useState, useEffect } from 'react';
 
-import { Box, styled, TextareaAutosize, Button, FormControl, InputBase } from '@mui/material';
-import { AddCircle as Add } from '@mui/icons-material';
+import { Box, styled, Button, InputBase } from '@mui/material';
+import { ImageOutlined } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { API } from '../../service/api';
 
-const Container = styled(Box)(({ theme }) => ({
-    margin: '50px 100px',
+const PageWrapper = styled(Box)(({ theme }) => ({
+    maxWidth: 860,
+    margin: '40px auto',
+    padding: '0 24px 80px',
     [theme.breakpoints.down('md')]: {
-        margin: 0
-    }
+        margin: '16px auto',
+        padding: '0 16px 60px',
+    },
 }));
 
-const Image = styled('img')({
-    width: '100%',
-    height: '50vh',
-    objectFit: 'cover'
-});
-
-const StyledFormControl = styled(FormControl)`
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-`;
-
-const InputTextField = styled(InputBase)`
-    flex: 1;
-    margin: 0 30px;
-    font-size: 25px;
-`;
-
-const StyledTextArea = styled(TextareaAutosize)`
+const HeroImage = styled('img')`
     width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+`;
+
+const ToolBar = styled(Box)`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 10px;
+`;
+
+const UploadLabel = styled('label')`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(217, 70, 239, 0.08);
+    border: 1px solid rgba(217, 70, 239, 0.2);
+    color: #d946ef;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+
+    &:hover {
+        background: rgba(217, 70, 239, 0.16);
+        border-color: rgba(217, 70, 239, 0.45);
+        box-shadow: 0 0 14px rgba(217, 70, 239, 0.2);
+    }
+`;
+
+const TitleInput = styled(InputBase)`
+    flex: 1;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    color: #f1f5f9;
+    letter-spacing: -0.5px;
+
+    input::placeholder {
+        color: #1e293b;
+    }
+`;
+
+const UpdateButton = styled(Button)`
+    background: linear-gradient(135deg, #d946ef 0%, #7c3aed 100%);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    text-transform: none;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 18px rgba(217, 70, 239, 0.3);
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+
+    &:hover {
+        box-shadow: 0 8px 28px rgba(217, 70, 239, 0.45);
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+    }
+`;
+
+const StoryTextarea = styled('textarea')`
+    width: 100%;
+    min-height: 320px;
+    background: transparent;
     border: none;
-    margin-top: 50px;
-    font-size: 18px;
-    &:focus-visible {
-        outline: none;
+    outline: none;
+    resize: none;
+    font-size: 17px;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.85;
+    color: #64748b;
+    margin-top: 32px;
+    box-sizing: border-box;
+
+    &::placeholder {
+        color: #1e293b;
     }
 `;
 
@@ -48,82 +114,86 @@ const initialPost = {
     username: 'codeforinterview',
     categories: 'Tech',
     createdDate: new Date()
-}
+};
 
 const Update = () => {
     const navigate = useNavigate();
-
     const [post, setPost] = useState(initialPost);
     const [file, setFile] = useState('');
     const [imageURL, setImageURL] = useState('');
-
     const { id } = useParams();
 
     const url = 'https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80';
-    
+
     useEffect(() => {
         const fetchData = async () => {
             let response = await API.getPostById(id);
             if (response.isSuccess) {
                 setPost(response.data);
             }
-        }
+        };
         fetchData();
     }, []);
 
     useEffect(() => {
-        const getImage = async () => { 
-            if(file) {
+        const getImage = async () => {
+            if (file) {
                 const data = new FormData();
                 data.append("name", file.name);
                 data.append("file", file);
-                
                 const response = await API.uploadFile(data);
                 if (response.isSuccess) {
                     post.picture = response.data;
-                    setImageURL(response.data);    
+                    setImageURL(response.data);
                 }
             }
-        }
+        };
         getImage();
-    }, [file])
+    }, [file]);
 
     const updateBlogPost = async () => {
         await API.updatePost(post);
         navigate(`/details/${id}`);
-    }
+    };
 
     const handleChange = (e) => {
         setPost({ ...post, [e.target.name]: e.target.value });
-    }
+    };
 
     return (
-        <Container>
-            <Image src={post.picture || url} alt="post" />
+        <PageWrapper>
+            <HeroImage src={post.picture || url} alt="post" />
 
-            <StyledFormControl>
-                <label htmlFor="fileInput">
-                    <Add fontSize="large" color="action" />
-                </label>
+            <ToolBar>
+                <UploadLabel htmlFor="fileInput">
+                    <ImageOutlined style={{ fontSize: 20 }} />
+                </UploadLabel>
                 <input
                     type="file"
                     id="fileInput"
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                     onChange={(e) => setFile(e.target.files[0])}
                 />
-                <InputTextField onChange={(e) => handleChange(e)} value={post.title} name='title' placeholder="Title" />
-                <Button onClick={() => updateBlogPost()} variant="contained" color="primary">Update</Button>
-            </StyledFormControl>
+                <TitleInput
+                    onChange={handleChange}
+                    value={post.title}
+                    name="title"
+                    placeholder="Your idea title..."
+                    fullWidth
+                />
+                <UpdateButton onClick={updateBlogPost} variant="contained">
+                    Update
+                </UpdateButton>
+            </ToolBar>
 
-            <StyledTextArea
-                rowsMin={5}
+            <StoryTextarea
                 placeholder="Tell your story..."
-                name='description'
-                onChange={(e) => handleChange(e)} 
+                name="description"
+                onChange={handleChange}
                 value={post.description}
             />
-        </Container>
-    )
-}
+        </PageWrapper>
+    );
+};
 
 export default Update;

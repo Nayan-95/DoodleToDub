@@ -1,89 +1,156 @@
-import { Button, Table, TableHead, TableRow, TableCell, TableBody, styled } from '@mui/material';
+import { Button, styled, Box, Typography } from '@mui/material';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { categories } from '../../constants/data';
 
-const StyledTable = styled(Table)`
-    border: 1px solid rgba(224, 224, 224, 1);
+const Sidebar = styled(Box)`
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 100%;
+`;
+
+const CreateButton = styled(Link)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background: linear-gradient(135deg, #d946ef 0%, #7c3aed 100%);
+    box-shadow: 0 4px 20px rgba(217, 70, 239, 0.3);
+    border: 1px solid rgba(217, 70, 239, 0.3);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(217, 70, 239, 0.45);
+        filter: brightness(1.08);
+    }
+    &:active { transform: translateY(0); }
+`;
+
+const SectionLabel = styled(Typography)`
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #334155;
+    padding: 0 4px;
+    margin-top: 8px;
+`;
+
+const CategoryList = styled(Box)`
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: rgba(15, 22, 35, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 8px;
+    backdrop-filter: blur(12px);
+`;
+
+const AllLink = styled(Link)`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
     border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
-    background-color: #f3e5f5; /* Light purple background color */
-`;
-
-const StyledButton = styled(Button)`
-    margin: 20px;
-    width: 85%;
-    background: #d733ff;
-    color: black;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    color: #d946ef;
     text-decoration: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+
     &:hover {
-        background: #be33ff;
+        background: rgba(217, 70, 239, 0.08);
+        color: #f0abfc;
+    }
+
+    &::before {
+        content: '⊞';
+        font-size: 15px;
     }
 `;
 
-const StyledLink = styled(Link)`
+const CategoryLink = styled(Link, { shouldForwardProp: p => p !== 'active' })`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
     text-decoration: none;
-    color: #d733ff;
-    transition: all 0.3s ease;
+    color: ${p => p.active ? '#d946ef' : '#64748b'};
+    background: ${p => p.active ? 'rgba(217, 70, 239, 0.1)' : 'transparent'};
+    border: 1px solid ${p => p.active ? 'rgba(217, 70, 239, 0.25)' : 'transparent'};
+    transition: all 0.2s ease;
 
     &:hover {
-        font-weight: bold;
-        transform: scale(1.1);
+        color: #c4b5fd;
+        background: rgba(139, 92, 246, 0.08);
+    }
+
+    &::before {
+        content: '›';
+        font-size: 16px;
+        opacity: 0.5;
     }
 `;
 
-const StyledTableCell = styled(TableCell)`
-    padding: 16px;
-    &:hover {
-        background: rgba(100, 149, 237, 0.1);
-    }
-`;
-
-const StyledTableRow = styled(TableRow)`
-    &:nth-of-type(odd) {
-        background-color: rgba(224, 224, 224, 0.5);
-    }
-`;
+const CategoryEmojis = {
+    'Music': '🎵',
+    'Movies': '🎬',
+    'Sports': '⚽',
+    'Tech': '💻',
+    'Fashion': '👗',
+    'Science': '🔬',
+    'Travel': '✈️',
+    'Education': '📚',
+    'Health': '💪',
+    'Politics': '🏛️',
+    default: '📌'
+};
 
 const Categories = () => {
     const [searchParams] = useSearchParams();
     const category = searchParams.get('category');
-    
+
     return (
-        <>
-            <Link to={`/create?category=${category || ''}`} style={{ textDecoration: 'none' }}>
-                <StyledButton variant="contained">Have an Idea! Drop it here</StyledButton>
-            </Link>
-            
-            <StyledTable>
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>
-                            <StyledLink to={"/"}>
-                                All Categories
-                            </StyledLink>
-                        </StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        categories.map(category => (
-                            <StyledTableRow key={category.id}>
-                                <StyledTableCell>
-                                    <StyledLink to={`/?category=${category.type}`}>
-                                        {category.type}
-                                    </StyledLink>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))
-                    }
-                </TableBody>
-            </StyledTable>
-        </>
-    )
-}
+        <Sidebar>
+            <CreateButton to={`/create?category=${category || ''}`}>
+                ✦ Drop Your Idea
+            </CreateButton>
+
+            <SectionLabel>Browse</SectionLabel>
+
+            <CategoryList>
+                <AllLink to="/">All Ideas</AllLink>
+                {categories.map(cat => (
+                    <CategoryLink
+                        key={cat.id}
+                        to={`/?category=${cat.type}`}
+                        active={category === cat.type ? 1 : 0}
+                    >
+                        {CategoryEmojis[cat.type] || CategoryEmojis.default} {cat.type}
+                    </CategoryLink>
+                ))}
+            </CategoryList>
+        </Sidebar>
+    );
+};
 
 export default Categories;

@@ -1,16 +1,105 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #d946ef;
+  --primary-light: #f0abfc;
+  --primary-dark: #a21caf;
+  --primary-glow: rgba(217, 70, 239, 0.35);
+  --secondary: #8b5cf6;
+  --secondary-glow: rgba(139, 92, 246, 0.3);
+  --bg-base: #080b12;
+  --bg-surface: #0f1623;
+  --bg-card: #141d2e;
+  --bg-glass: rgba(20, 29, 46, 0.75);
+  --border: rgba(217, 70, 239, 0.18);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --accent-pink: #ec4899;
+  --accent-violet: #7c3aed;
+  --success: #10b981;
+  --error: #f43f5e;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-glow: 0 0 30px rgba(217, 70, 239, 0.2);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 16px 48px rgba(217, 70, 239, 0.25);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(217, 70, 239, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.08), transparent);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Space Grotesk', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary-dark);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Selection */
+::selection {
+  background: rgba(217, 70, 239, 0.3);
+  color: #fff;
+}
+
+/* Global link reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Utility classes */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+.glow-text {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 50%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth transitions globally */
+button, a, input, textarea {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}

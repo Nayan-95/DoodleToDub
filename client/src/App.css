@@ -3,7 +3,63 @@
   border: none;
   font-size: 16px;
   text-transform: uppercase;
-  font-family: 'Roboto';
+  font-family: 'Inter', 'Roboto', sans-serif;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+/* Page-level fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(217, 70, 239, 0.45);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
